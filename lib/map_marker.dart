@@ -1,3 +1,4 @@
+/*
 import "package:flutter/material.dart";
 import "package:geolocator/geolocator.dart";
 import "package:mtbmap_demo/src/location_provider.dart";
@@ -84,3 +85,4 @@ class DrawTriangle extends CustomPainter {
     return false;
   }
 }
+*/
