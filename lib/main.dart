@@ -43,6 +43,7 @@ class MtbMap extends StatefulWidget {
 
 class _MtbMapState extends State<MtbMap> {
   final MapController _mapController = MapController();
+  bool tracking = true;
   var interactiveFlags = InteractiveFlag.rotate |
       InteractiveFlag.doubleTapZoom |
       InteractiveFlag.pinchZoom |
@@ -58,10 +59,20 @@ class _MtbMapState extends State<MtbMap> {
             Provider.of<LocationProvider>(context, listen: false);
         _mapController.move(LatLng(62.5942, 9.6912), 12);
         locationProvider.locationStream.listen((event) {
-          _mapController.move(
-            LatLng(event.latitude, event.longitude),
-            _mapController.zoom,
-          );
+          if (tracking) {
+            _mapController.moveAndRotate(
+              LatLng(event.latitude, event.longitude),
+              _mapController.zoom,
+              -event.heading,
+            );
+          }
+        });
+        _mapController.mapEventStream.listen((event) {
+          if (tracking && event.source == MapEventSource.onDrag) {
+            setState(() {
+              tracking = false;
+            });
+          }
         });
       },
     );
@@ -70,29 +81,28 @@ class _MtbMapState extends State<MtbMap> {
   @override
   Widget build(BuildContext context) {
     LocationProvider locationProvider = Provider.of<LocationProvider>(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("MtbMap Norge"),
-      ),
-      body: StreamBuilder<Position>(
-        stream: locationProvider.locationStream,
-        builder: (context, snapshot) {
-          Marker? marker;
-          if (snapshot.hasData) {
-            marker = Marker(
-              width: 50,
-              height: 50,
-              point: LatLng(
-                snapshot.data!.latitude,
-                snapshot.data!.longitude,
-              ),
-              builder: (context) {
-                return MapMarker();
-              },
-            );
-          }
-          return Stack(
-            alignment: AlignmentDirectional.bottomCenter,
+    return StreamBuilder<Position>(
+      stream: locationProvider.locationStream,
+      builder: (context, snapshot) {
+        Marker? marker;
+        if (snapshot.hasData) {
+          marker = Marker(
+            width: 50,
+            height: 50,
+            point: LatLng(
+              snapshot.data!.latitude,
+              snapshot.data!.longitude,
+            ),
+            builder: (context) {
+              return MapMarker();
+            },
+          );
+        }
+        return Scaffold(
+          appBar: AppBar(
+            title: Text("MtbMap Norge"),
+          ),
+          body: Stack(
             children: [
               FlutterMap(
                 mapController: _mapController,
@@ -114,12 +124,44 @@ class _MtbMapState extends State<MtbMap> {
                 ],
               ),
               SafeArea(
-                child: Dashboard(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Dashboard(),
+                      ),
+                    ),
+                  ],
+                ),
               )
             ],
-          );
-        },
-      ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            child:
+                Icon(tracking ? Icons.navigation : Icons.navigation_outlined),
+            onPressed: () {
+              setState(() {
+                tracking = !tracking;
+              });
+              if (tracking && snapshot.hasData) {
+                _mapController.moveAndRotate(
+                  LatLng(snapshot.data!.latitude, snapshot.data!.longitude),
+                  _mapController.zoom,
+                  -snapshot.data!.heading,
+                );
+              } else {
+                _mapController.moveAndRotate(
+                  _mapController.center,
+                  _mapController.zoom,
+                  0,
+                );
+              }
+            },
+          ),
+        );
+      },
     );
   }
 }
