@@ -4,6 +4,7 @@ import "package:geolocator/geolocator.dart";
 import "package:latlong2/latlong.dart";
 import "package:mtbmap_demo/map_marker.dart";
 import "package:mtbmap_demo/src/location_provider.dart";
+import 'package:mtbmap_demo/src/widgets/dashboard.dart';
 import "package:provider/provider.dart";
 
 void main() {
@@ -91,6 +92,7 @@ class _MtbMapState extends State<MtbMap> {
             );
           }
           return Stack(
+            alignment: AlignmentDirectional.bottomCenter,
             children: [
               FlutterMap(
                 mapController: _mapController,
@@ -110,6 +112,9 @@ class _MtbMapState extends State<MtbMap> {
                     ],
                   )
                 ],
+              ),
+              SafeArea(
+                child: Dashboard(),
               )
             ],
           );
