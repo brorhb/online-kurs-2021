@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter_map/plugin_api.dart";
 
 void main() {
   runApp(MyApp());
@@ -28,12 +29,30 @@ class MtbMap extends StatefulWidget {
 }
 
 class _MtbMapState extends State<MtbMap> {
+  final MapController _mapController = MapController();
+  var interactiveFlags = InteractiveFlag.rotate |
+      InteractiveFlag.doubleTapZoom |
+      InteractiveFlag.pinchZoom |
+      InteractiveFlag.drag;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text("Hello world"),
+      appBar: AppBar(
+        title: Text("MtbMap Norge"),
+      ),
+      body: FlutterMap(
+        mapController: _mapController,
+        options: MapOptions(interactiveFlags: interactiveFlags),
+        layers: [
+          TileLayerOptions(
+            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            subdomains: ["a", "b", "c"],
+            attributionBuilder: (_) {
+              return Text("© OpenStreetMap contributors");
+            },
+          ),
+        ],
       ),
     );
   }
