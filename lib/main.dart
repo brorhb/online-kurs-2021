@@ -90,25 +90,21 @@ class _MtbMapState extends State<MtbMap> {
               },
             );
           }
-          return Stack(
-            children: [
-              FlutterMap(
-                mapController: _mapController,
-                options: MapOptions(interactiveFlags: interactiveFlags),
-                layers: [
-                  TileLayerOptions(
-                    urlTemplate:
-                        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                    subdomains: ["a", "b", "c"],
-                    attributionBuilder: (_) {
-                      return Text("© OpenStreetMap contributors");
-                    },
-                  ),
-                  MarkerLayerOptions(
-                    markers: [
-                      if (marker != null) marker,
-                    ],
-                  )
+          return FlutterMap(
+            mapController: _mapController,
+            options: MapOptions(interactiveFlags: interactiveFlags),
+            layers: [
+              TileLayerOptions(
+                urlTemplate:
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                subdomains: ["a", "b", "c"],
+                attributionBuilder: (_) {
+                  return Text("© OpenStreetMap contributors");
+                },
+              ),
+              MarkerLayerOptions(
+                markers: [
+                  if (marker != null) marker,
                 ],
               )
             ],
