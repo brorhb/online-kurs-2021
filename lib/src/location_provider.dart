@@ -2,7 +2,8 @@ import "package:flutter/material.dart";
 import "package:geolocator/geolocator.dart";
 
 class LocationProvider with ChangeNotifier {
-  final StreamController<Position> _locationStream = StreamController<Position>();
+  final StreamController<Position> _locationStream =
+      StreamController.broadcast();
   Stream<Position> get locationStream =>
       _locationStream.stream.asBroadcastStream();
   set _setLocation(Position val) {
