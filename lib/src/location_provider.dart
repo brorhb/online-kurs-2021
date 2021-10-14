@@ -5,7 +5,7 @@ class LocationProvider with ChangeNotifier {
   final StreamController<Position> _locationStream =
       StreamController.broadcast();
   Stream<Position> get locationStream =>
-      _locationStream.stream.asBroadcastStream();
+      _locationStream.stream;
   set _setLocation(Position val) {
     _locationStream.sink.add(val);
   }
