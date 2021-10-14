@@ -11,3 +11,7 @@ Gå til [Flutter](https://flutter.dev) sin hjemmeside, og følg oppsettet for di
 Prosjektet vi skal prøve å komme oss gjennom i dag, er en base for en app jeg lagde sommeren 2020. Jeg hadde akkurat begynt med stisykling i Oppdal, og ønsket meg en app for å se stier i nærheten av der jeg befant meg. Jeg hadde funnet frem til [MTBmap](https://mtbmap.no), og spurte utvikleren der om lov til å bruke dataen hans, og det fikk jeg lov til 🎉
 
 I dag skal vi gå gjennom hvor fort du kan komme i gang med en kart app for Android og iOS med Flutter 🤟
+
+
+# Ekstra steg for Apple Silicon 
+https://github.com/flutter/flutter/wiki/Developing-with-Flutter-on-Apple-Silicon
