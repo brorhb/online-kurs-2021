@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
 import "package:geolocator/geolocator.dart";
-import "package:rxdart/subjects.dart";
 
 class LocationProvider with ChangeNotifier {
-  final BehaviorSubject<Position> _locationStream = BehaviorSubject();
-  Stream<Position> get locationStream => _locationStream.stream;
+  final StreamController<Position> _locationStream = StreamController<Position>();
+  Stream<Position> get locationStream =>
+      _locationStream.stream.asBroadcastStream();
   set _setLocation(Position val) {
     _locationStream.sink.add(val);
   }
@@ -44,11 +44,5 @@ class LocationProvider with ChangeNotifier {
 
     return locationPermission == LocationPermission.always ||
         locationPermission == LocationPermission.whileInUse;
-  }
-
-  @override
-  void dispose() {
-    _locationStream.drain();
-    super.dispose();
   }
 }
