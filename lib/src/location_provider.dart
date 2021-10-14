@@ -3,8 +3,10 @@ import "package:geolocator/geolocator.dart";
 import "package:rxdart/subjects.dart";
 
 class LocationProvider with ChangeNotifier {
-  final BehaviorSubject<Position> _locationStream = BehaviorSubject();
-  Stream<Position> get locationStream => _locationStream.stream;
+  final StreamController<Position> _locationStream =
+      StreamController.broadcast();
+  Stream<Position> get locationStream =>
+      _locationStream.stream;
   set _setLocation(Position val) {
     _locationStream.sink.add(val);
   }
